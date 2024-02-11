@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hima's Blog</title>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    margin-top: 20px;
+    padding: 0;
+    background-color: #f4f4f4;
+    background-image: url(background.png);
+}
+
+button {
+  width: 165px;
+  height: 62px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 17px;
+  border-radius: 1rem;
+  border: none;
+  position: relative;
+  background: #100720;
+  transition: 0.1s;
+}
+
+button::after {
+  content: '';
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(255,94,247,1) 17.8%, rgba(2,245,255,1) 100.2% );
+  filter: blur(15px);
+  z-index: -1;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+button:active {
+  transform: scale(0.9) rotate(3deg);
+  background: radial-gradient( circle farthest-corner at 10% 20%,  rgba(255,94,247,1) 17.8%, rgba(2,245,255,1) 100.2% );
+  transition: 0.5s;
+}
+
+#blog-form {
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    animation: none;
+}
+
+#blog-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+#blog-form input,
+#blog-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#blog-form button {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+#blog-container {
+    max-width: 800px;
+    margin: 20px auto;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.post {
+    position: relative;
+    background-color: #fff;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.post img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.post h2 {
+    color: #333;
+}
+
+.post p {
+    color: #666;
+}
+
+/* Animations for buttons */
+.post-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.post-buttons button {
+    background-color: #ff6b6b;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.post:hover .post-buttons button {
+    opacity: 1;
+}
+
+.post-datetime {
+    color: #888;
+    font-size: 14px;
+    margin-top: 5px;
+}
+    </style>
+</head>
+<body>
+    
+    <button id="logoutBtn" class="btn">
+        Log Out
+    </button>
+
+    <!-- Blog Post Form -->
+    <form id="blog-form">
+        <label for="image">Upload Image:</label>
+        <input type="file" id="image" name="image" required>
+
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="4" required></textarea>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="blog-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const blogContainer = document.getElementById('blog-container');
+            const blogForm = document.getElementById('blog-form');
+
+            // Function to get the current date and time
+            function getDateAndTime() {
+                const now = new Date();
+                const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZoneName: 'short' };
+                return now.toLocaleDateString('en-US', options);
+            }
+
+            // Function to render a blog post
+            function renderBlogPost(post, index) {
+                const postElement = document.createElement('div');
+                postElement.classList.add('post');
+
+                const titleElement = document.createElement('h2');
+                titleElement.textContent = post.title;
+
+                const imageElement = document.createElement('img');
+                imageElement.src = post.image;
+                imageElement.alt = post.title + ' Image';
+
+                const contentElement = document.createElement('p');
+                contentElement.textContent = post.content;
+
+                const dateTimeElement = document.createElement('p');
+                dateTimeElement.classList.add('post-datetime');
+                dateTimeElement.textContent = `Posted on: ${post.dateTime}`;
+
+                const postButtons = document.createElement('div');
+                postButtons.classList.add('post-buttons');
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.addEventListener('click', () => handleDelete(index));
+
+                const editButton = document.createElement('button');
+                editButton.textContent = 'Edit';
+                editButton.addEventListener('click', () => handleEdit(index));
+
+                postButtons.appendChild(editButton);
+                postButtons.appendChild(deleteButton);
+
+                postElement.appendChild(titleElement);
+                postElement.appendChild(imageElement);
+                postElement.appendChild(contentElement);
+                postElement.appendChild(dateTimeElement);
+                postElement.appendChild(postButtons);
+
+                blogContainer.appendChild(postElement);
+            }
+
+            // Function to save blog posts to local storage
+            function saveToLocalStorage(posts) {
+                localStorage.setItem('blogPosts', JSON.stringify(posts));
+            }
+
+            // Function to retrieve blog posts from local storage
+            function getFromLocalStorage() {
+                const storedPosts = localStorage.getItem('blogPosts');
+                return storedPosts ? JSON.parse(storedPosts) : [];
+            }
+
+            // Function to handle form submission
+            function handleFormSubmit(event) {
+                event.preventDefault();
+
+                // Get values from the form
+                const imageFile = document.getElementById('image').files[0];
+                const message = document.getElementById('message').value;
+
+                // Create a FileReader to read the contents of the image file
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    // e.target.result contains the data URL for the image
+                    const imageUrl = e.target.result;
+
+                    // Add the new blog post with date and time
+                    const newPost = {
+                        title: 'New Blog Post',
+                        content: message,
+                        image: imageUrl,
+                        dateTime: getDateAndTime(),
+                    };
+
+                    // Retrieve existing blog posts from local storage
+                    const existingPosts = getFromLocalStorage();
+
+                    // Add the new post to the existing posts
+                    const updatedPosts = [...existingPosts, newPost];
+
+                    // Save the updated posts to local storage
+                    saveToLocalStorage(updatedPosts);
+
+                    // Render the new blog post
+                    renderBlogPost(newPost, updatedPosts.length - 1);
+
+                    // Clear the form
+                    blogForm.reset();
+
+                    // Increment the blog count
+                    incrementBlogCount();
+
+                    // Redirect to index.html if needed
+                    // window.location.href = 'file:///C:/Users/HP/Desktop/yoga website/index.html';
+                };
+
+                // Read the contents of the image file as a data URL
+                if (imageFile) {
+                    reader.readAsDataURL(imageFile);
+                } else {
+                    // If no image is selected, still trigger the onload function
+                    reader.onload(e);
+                }
+            }
+
+            // Function to increment the blog count
+            function incrementBlogCount() {
+                // Increment the blog count
+                const blogPostCount = localStorage.getItem('blogPostCount') || '0';
+                const updatedCount = parseInt(blogPostCount, 10) + 1;
+
+                // Save the updated count to local storage
+                localStorage.setItem('blogPostCount', updatedCount.toString());
+            }
+
+
+            // Function to handle delete button click
+            function handleDelete(index) {
+                // Retrieve existing blog posts from local storage
+                const existingPosts = getFromLocalStorage();
+
+                // Remove the post at the specified index
+                existingPosts.splice(index, 1);
+
+                // Save the updated posts to local storage
+                saveToLocalStorage(existingPosts);
+
+                // Clear the blog container
+                blogContainer.innerHTML = '';
+
+                // Render the remaining blog posts
+                existingPosts.forEach((post, i) => {
+                    renderBlogPost(post, i);
+                });
+            }
+
+            // Function to handle edit button click
+            function handleEdit(index) {
+                // Retrieve existing blog posts from local storage
+                const existingPosts = getFromLocalStorage();
+
+                // Get the post at the specified index
+                const postToEdit = existingPosts[index];
+
+                // Prompt the user for new content
+                const newContent = prompt('Enter new content:', postToEdit.content);
+
+                // Create a temporary file input element
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+
+                // Trigger a click on the file input to open the file dialog
+                fileInput.click();
+
+                // Listen for changes in the file input
+                fileInput.addEventListener('change', () => {
+                    const newImageFile = fileInput.files[0];
+
+                    if (newImageFile) {
+                        // Use the new image if provided
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            postToEdit.image = e.target.result;
+                            postToEdit.dateTime = getDateAndTime(); // Update date/time
+
+                            // Save the updated posts to local storage
+                            saveToLocalStorage(existingPosts);
+
+                            // Clear the blog container
+                            blogContainer.innerHTML = '';
+
+                            // Render the remaining blog posts
+                            existingPosts.forEach((post, i) => {
+                                renderBlogPost(post, i);
+                            });
+                        };
+
+                        reader.readAsDataURL(newImageFile);
+                    }
+                });
+
+                    // Check if the user entered new content
+                if (newContent !== null) {
+                    // Update the content
+                    postToEdit.content = newContent;
+                }
+            }
+
+            // Attach event listener for form submission
+            blogForm.addEventListener('submit', handleFormSubmit);
+
+            // Render existing blog posts from local storage
+            const existingPosts = getFromLocalStorage();
+            existingPosts.forEach((post, index) => {
+                renderBlogPost(post, index);
+            });
+
+            // Get the logout button element
+            const logoutBtn = document.getElementById('logoutBtn');
+
+            // Add a click event listener to the logout button
+            logoutBtn.addEventListener('click', handleLogout);
+
+            // Function to handle logout
+            function handleLogout() {
+                console.log('Logout function executed'); // Add this line for debugging
+                alert('Logout successfully');
+                window.location.href='index.html';
+            }
+
+        });
+
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Hima</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="fontawesome-free-5.15.3-web/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <style>
+        /* Your CSS styles go here */
+        body {
+          
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background-color: #f5f5f5;
+        }
+
+        .header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background-color: #3498db;
+        color: #fff;
+        padding: 15px;
+        text-align: center;
+        z-index: 1000; /* Ensures the header appears above other elements */
+        }
+
+        .navbar {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        }
+
+        .navbar a {
+        color: #333;
+        padding: 10px 15px;
+        text-decoration: none;
+        margin: 0 10px;
+        }
+
+        .navbar a:hover {
+        background-color: #555;
+        border-radius: 5px;
+        }
+
+        .contact-section {
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-top: 100px;
+        font-size: 15px;
+        border-radius: 10px;
+        max-width: 400px;
+        width: 100%;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            text-transform: none;
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+        }
+
+        .contact-form button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .contact-form button:hover {
+            background-color: #45a049;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media only screen and (max-width: 600px) {
+    
+        .contact-section {
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-top: 400px;
+        font-size: 15px;
+        border-radius: 10px;
+        max-width: 400px;
+        width: 100%;
+        }
+    }
+
+        
+
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <a href="#" id="logo">
+            <img src="Y_LOGO3333.png" alt="Yoga Symbol" style="width: 90px; height: 70px;">
+            Hima's YOGA
+        </a>
+
+        <nav class="navbar">
+            <a href="index.html">Home</a>
+            <a href="#">About</a>
+            <a href="index.html#gallery1">Gallery</a>
+        </nav>
+    </header>
+
+    <div id="home" class="back"></div>
+
+    <div class="contact-section">
+        <h2>Queries</h2>
+        
+        <form action="https://formsubmit.co/30b24bf697ca2db753a2cda2dba657f9" method="POST" class="contact-form" onsubmit="return handleSubmit()">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_next" value="https://vinay4562.github.io/himayoga/success.html">
+
+
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="Phonenumber">Phone Number:</label>
+            <input type="Phonenumber" id="Phonenumber" name="Phonenumber" required>
+            
+            <label for="Type Of Problem">Type of Problem:</label>
+            <select id="Type Of Problem" name="Type Of Problem">
+                <option value="none">None</option>
+                <option value="Overweight">Overweight</option>
+                <option value="Underweight">Underweight</option>
+                <option value="Diabetes Type">Diabetes Type</option>
+                <option value="Thyroid">Thyroid</option>
+                <option value="Fatty Liver">Fatty Liver</option>
+                <option value="PCOS/PCOD">PCOS/PCOD</option>
+                <option value="Low Energy Levels">Low Energy Levels</option>
+            </select>
+            <br>
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+<script>
+  function handleSubmit() {
+    var name = document.getElementById("Name").value;
+    var email = document.getElementById("Email").value;
+    var selectedItems = document.getElementById("Type Of Problem").options[document.getElementById("Type Of Problem").selectedIndex].text;
+    var Phonenumber = document.getElementById("Phonenumber").value;
+    var message = document.getElementById("message").value;
+
+    // Log the values
+    console.log("Name: " + name);
+    console.log("Email: " + email);
+    console.log("Phonenumber: " + Phonenumber)
+    console.log("Selected Items: " + selectedItems);
+    console.log("Message: " + message);
+
+    // Create a FormData object to send the form data
+    var formData = new FormData();
+    formData.append("Name", name);
+    formData.append("Email", email);
+    formData.append("Phonenumber", Phonenumber);
+    formData.append("Type Of Problem", selectedItems);
+    formData.append("Message", message);
+
+    // Use fetch API to send the form data to FormSubmit
+    fetch("https://formsubmit.co/vkvinaykumar391@gmail.com", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("FormSubmit Response:", data);
+        // You can handle the response as needed
+    })
+    .catch(error => {
+        console.error("FormSubmit Error:", error);
+    });
+
+    // Prevent the default form submission
+    return false;
+}
+
+
+</script>
+
+</body>
+
+</html>

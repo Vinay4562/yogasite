@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="fontawesome-free-5.15.3-web/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SYI5L+vv8HUdhCG9gjWQqm1aFandd21uPZ1aaC" crossorigin="anonymous">
+    <title>Blog - View</title>
+    <style>
+        /* Add any additional styling as needed for the view page */
+        body {
+            font-family: Arial, sans-serif;
+            margin-top: 0px;
+            padding: 0;
+            background-color: #f4f4f4;
+            background-image: url(background.png);
+            background-position: fixed;
+        }
+
+        .header {
+        position: relative;
+        top: 0;
+        width: 100%;
+        background-color: #3498db;
+        color: #fff;
+        padding: 15px;
+        text-align: center;
+        z-index: 1000; /* Ensures the header appears above other elements */
+        }
+
+        .navbar {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+        }
+
+        .navbar a {
+        color: #333;
+        padding: 10px 15px;
+        text-decoration: none;
+        margin: 0 10px;
+        }
+
+        .navbar a:hover {
+        background-color: #555;
+        border-radius: 5px;
+        }
+
+        #blog-container {
+            max-width: 600px;
+            margin: -5px auto 20px; /* Added margin-top: 60px for the gap below the navigation bar */
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .post {
+            position: relative;
+            background-color: #fff;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .post img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .post h2 {
+            color: #333;
+        }
+
+        .post p {
+            color: #e90b0b;
+            font-size: 15px;
+        }
+
+        .post-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .post-buttons button {
+            background-color: #ff6b6b;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .post:hover .post-buttons button {
+            opacity: 1;
+        }
+
+        .post-datetime {
+            color: #888;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .comment-section {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .comment-input {
+            flex: 1;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .post-comment-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .post-comment-button:hover {
+            background-color: #45a049;
+        }
+
+        .comment-list {
+            list-style-type: none;
+            padding: 0;
+            font-size: 12px;
+        }
+
+        .comment-text {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <a href="#" id="logo">
+            <img src="Y_LOGO3333.png" alt="Yoga Symbol" style="width: 90px; height: 70px;">
+            Hima's YOGA
+        </a>
+
+        <nav class="navbar">
+            <a href="index.html">Home</a>
+            <a href="index.html#class1">Class</a>
+            <a href="index.html#gallery1">Gallery</a>
+        </nav>
+    </header>
+
+    <div id="home" class="back"></div>
+
+    <div id="blog-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const blogContainer = document.getElementById('blog-container');
+
+            function renderBlogPost(post) {
+                const postElement = document.createElement('div');
+                postElement.classList.add('post');
+
+                const titleElement = document.createElement('h2');
+                titleElement.textContent = post.title;
+
+                const imageElement = document.createElement('img');
+                imageElement.src = post.image;
+                imageElement.alt = post.title + ' Image';
+
+                const contentElement = document.createElement('p');
+                contentElement.textContent = post.content;
+
+                const dateTimeElement = document.createElement('p');
+                dateTimeElement.classList.add('post-datetime');
+                dateTimeElement.textContent = post.dateTime;
+
+                const commentSection = document.createElement('div');
+                commentSection.classList.add('comment-section');
+
+                const commentInput = document.createElement('input');
+                commentInput.type = 'text';
+                commentInput.placeholder = 'Add a comment...';
+                commentInput.classList.add('comment-input');
+
+                const postCommentButton = document.createElement('button');
+                postCommentButton.textContent = 'Post Comment';
+                postCommentButton.classList.add('post-comment-button');
+
+                const commentList = document.createElement('ul');
+                commentList.classList.add('comment-list');
+
+                if (post.comments && post.comments.length > 0) {
+                    post.comments.forEach(comment => {
+                        const commentItem = document.createElement('li');
+                        commentItem.classList.add('comment-text');
+                        commentItem.textContent = comment;
+                        commentList.appendChild(commentItem);
+                    });
+                }
+
+                postCommentButton.addEventListener('click', function () {
+                    const commentText = commentInput.value.trim();
+                    if (commentText !== '') {
+                        const commentItem = document.createElement('li');
+                        commentItem.classList.add('comment-text');
+                        commentItem.textContent = commentText;
+                        commentList.appendChild(commentItem);
+
+                        // Update the existing post data with comments
+                        post.comments.push(commentText);
+                        updateLocalStorage();
+                    }
+                    commentInput.value = '';
+                });
+
+                commentSection.appendChild(commentInput);
+                commentSection.appendChild(postCommentButton);
+                commentSection.appendChild(commentList);
+
+                postElement.appendChild(titleElement);
+                postElement.appendChild(imageElement);
+                postElement.appendChild(contentElement);
+                postElement.appendChild(dateTimeElement);
+                postElement.appendChild(commentSection);
+
+                blogContainer.appendChild(postElement);
+            }
+
+            function updateLocalStorage() {
+                const postsToStore = Array.from(blogContainer.children).map(postElement => {
+                    return {
+                        title: postElement.querySelector('h2').textContent,
+                        image: postElement.querySelector('img').src,
+                        content: postElement.querySelector('p').textContent,
+                        dateTime: postElement.querySelector('.post-datetime').textContent,
+                        comments: Array.from(postElement.querySelectorAll('.comment-text')).map(comment => comment.textContent),
+                    };
+                });
+
+                localStorage.setItem('blogPosts', JSON.stringify(postsToStore));
+            }
+
+            function getFromLocalStorage() {
+                const storedPosts = localStorage.getItem('blogPosts');
+                return storedPosts ? JSON.parse(storedPosts) : [];
+            }
+
+            function clearBlogContainer() {
+                blogContainer.innerHTML = '';
+            }
+
+            // Load existing posts from local storage
+            const existingPosts = getFromLocalStorage();
+            clearBlogContainer(); // Clear the container before rendering
+            existingPosts.forEach(post => {
+                renderBlogPost(post);
+            });
+
+            // Call updateLocalStorage to ensure local storage is up to date
+            updateLocalStorage();
+        });
+
+        function generateUniqueId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .testimonials-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        #testimonial-form {
+            display: none;
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+
+        #testimonial-form.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .testimonial-button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .testimonial-button:hover {
+            background-color: #45a049;
+            transform: scale(1.1);
+        }
+
+        .testimonial-form-group {
+            margin-bottom: 15px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: #4CAF50;
+        }
+
+        button[type="button"] {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        button[type="button"]:hover {
+            background-color: #45a049;
+            transform: scale(1.1);
+        }
+
+        #testimonials-list {
+            margin-top: 20px;
+            font-size: 15px;
+        }
+
+        .testimonial-item {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="logo-container">
+        <a href="#" id="logo">
+            <img src="Y_LOGO3333.png" alt="Yoga Symbol" style="width: 90px; height: 70px;">
+            Hima's YOGA
+        </a>
+    </div>
+
+    <nav class="navbar">
+        <a href="index.html">Home</a>
+        <a href="https://instagram.com/himas.yoga?igshid=OGQ5ZDc2ODk2ZA==" class="social-link" target="_blank">Instagram</a>
+        <a href="https://youtube.com/@Himas.Yoga1?si=SzaxcFqaMes2srOR">Youtube</a>
+        <a href="contactus/contact.html">Contact us</a>
+    </nav>
+</header>
+
+<div class="testimonials-container">
+    <h2>Customer Reviews</h2>
+
+    <button class="testimonial-button" onclick="showTestimonialForm()">Add Testimonial</button>
+
+    <form id="testimonial-form" class="active">
+        <div class="testimonial-form-group">
+            <label for="customerName">Your Name:</label>
+            <input type="text" id="customerName" name="customerName" required>
+        </div>
+
+        <div class="testimonial-form-group">
+            <label for="testimonialContent">Testimonial:</label>
+            <textarea id="testimonialContent" name="testimonialContent" rows="4" required></textarea>
+        </div>
+
+        <button type="button" onclick="submitTestimonial()">Submit Testimonial</button>
+    </form>
+
+    <div id="testimonials-list">
+        <!-- Display existing testimonials here -->
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Load existing testimonials from localStorage
+        const savedTestimonials = localStorage.getItem('testimonials');
+        if (savedTestimonials) {
+            document.getElementById('testimonials-list').innerHTML = savedTestimonials;
+        }
+    });
+
+    function showTestimonialForm() {
+        const testimonialForm = document.getElementById('testimonial-form');
+        testimonialForm.style.display = 'block';
+        testimonialForm.classList.add('active');
+    }
+
+    function submitTestimonial() {
+        const customerName = document.getElementById('customerName').value;
+        const testimonialContent = document.getElementById('testimonialContent').value;
+
+        if (customerName && testimonialContent) {
+            const newTestimonial = `<div class="testimonial-item"><strong>${customerName}</strong>: ${testimonialContent}</div>`;
+            document.getElementById('testimonials-list').innerHTML += newTestimonial;
+
+            // Save testimonials to localStorage
+            const existingTestimonials = localStorage.getItem('testimonials') || '';
+            localStorage.setItem('testimonials', existingTestimonials + newTestimonial);
+
+            document.getElementById('customerName').value = '';
+            document.getElementById('testimonialContent').value = '';
+
+            const testimonialForm = document.getElementById('testimonial-form');
+            testimonialForm.classList.remove('active');
+            setTimeout(() => {
+                testimonialForm.style.display = 'none';
+            }, 500);
+        } else {
+            alert('Please fill in all fields before submitting.');
+        }
+    }
+</script>
+
+</body>
+</html>
